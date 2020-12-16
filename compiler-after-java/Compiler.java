@@ -4,6 +4,15 @@ import java.util.HashMap;
 
 abstract class ExprNode  {
     abstract void genCode();
+
+    public ExprNode multipliedBy(int arg) {
+        return MultNode.make(this, Constant.make(arg));
+    }
+
+    public ExprNode plus(int arg) {
+        return AddNode.make(this, Constant.make(arg));
+    }
+
 }
 
 class Constant extends ExprNode {
@@ -69,11 +78,8 @@ class MultNode extends ExprNode {
 class CompilerMain {
     public static void main(String[] args) {
         // ((10 * 10) + 10)
-        // ten.multipledBy(20).plus(30);
-        ExprNode tree = AddNode.make(
-            MultNode.make(Constant.make(10), Constant.make(20)),
-            Constant.make(30)
-        );
+        var ten = Constant.make(10);
+        var tree = ten.multipliedBy(20).plus(30);
         tree.genCode();
     }
 }
