@@ -1,5 +1,7 @@
 package after;
 
+import java.util.HashMap;
+
 abstract class ExprNode  {
     abstract void genCode();
 }
@@ -7,18 +9,15 @@ abstract class ExprNode  {
 class Constant extends ExprNode {
     private int value;
 
-    // HashMap <Integer, Constant> pool =  
+    private static HashMap<Integer, Constant> pool = new HashMap<>();
     private Constant(int value) {
         this.value = value;
     }
 
     public static ExprNode make(int val) {
-        // if val already in pool
-        // return that constant 
-        // else create that object 
-        // put it in the pool
-        // and return the constant 
-        
+        if(!pool.containsKey(val))
+            pool.put(val, new Constant(val));
+        return pool.get(val);
     }
 
     @Override
@@ -72,8 +71,8 @@ class CompilerMain {
         // ((10 * 10) + 10)
         // ten.multipledBy(20).plus(30);
         ExprNode tree = AddNode.make(
-            MultNode.make(Constant.make(10), Constant.make(10)),
-            Constant.make(10)
+            MultNode.make(Constant.make(10), Constant.make(20)),
+            Constant.make(30)
         );
         tree.genCode();
     }
